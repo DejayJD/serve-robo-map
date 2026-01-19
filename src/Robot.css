@@ -1,0 +1,44 @@
+.robot-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.robot-marker-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transform-origin: center center;
+}
+
+.robot-pulse-ring {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(79, 132, 175, 0.3);
+    z-index: 0;
+}
+
+.robot-shadow {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    filter: blur(4px);
+    z-index: 1;
+    top: 2px;
+    left: 2px;
+}
+
+.robot-icon {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    z-index: 2;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)) 
+            drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
