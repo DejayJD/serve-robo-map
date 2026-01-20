@@ -31,10 +31,19 @@ export const Robot = ({ position }: { position: LatLngTuple }) => {
   const robotRef = useRef<LeafletMarker | null>(null)
   const prevPositionRef = useRef<LatLngTuple | null>(position)
   const movementAnimationRef = useRef<number | null>(null)
+  const rotationTimeoutRef = useRef<number | null>(null)
   const rotationRef = useRef<number>(0)
 
   // Handle animations - rotation and movement
   useEffect(() => {
+    if (movementAnimationRef.current) {
+      cancelAnimationFrame(movementAnimationRef.current)
+      movementAnimationRef.current = null
+    }
+    if (rotationTimeoutRef.current) {
+      clearTimeout(rotationTimeoutRef.current)
+      rotationTimeoutRef.current = null
+    }
     const animate = async () => {
       if (!robotRef.current) return
 
@@ -67,7 +76,8 @@ export const Robot = ({ position }: { position: LatLngTuple }) => {
           )
 
           // Wait for the rotation animation to finish to resolve the promise
-          setTimeout(() => {
+          rotationTimeoutRef.current = window.setTimeout(() => {
+            rotationTimeoutRef.current = null
             // update the rotation reference to the new rotation
             rotationRef.current = rotationTo
             resolve(true)
@@ -93,7 +103,9 @@ export const Robot = ({ position }: { position: LatLngTuple }) => {
 
         // keep animating until finished
         if (progress < 1) {
-          requestAnimationFrame(animateMovement)
+          movementAnimationRef.current = requestAnimationFrame(animateMovement)
+        } else {
+          movementAnimationRef.current = null
         }
       }
       // Rotate animation
@@ -107,14 +119,18 @@ export const Robot = ({ position }: { position: LatLngTuple }) => {
       const startTime = performance.now()
       prevPositionRef.current = to
       movementAnimationRef.current = requestAnimationFrame(animateMovement)
-
-      return () => {
-        if (movementAnimationRef.current) {
-          cancelAnimationFrame(movementAnimationRef.current)
-        }
-      }
     }
     animate()
+    return () => {
+      if (movementAnimationRef.current) {
+        cancelAnimationFrame(movementAnimationRef.current)
+        movementAnimationRef.current = null
+      }
+      if (rotationTimeoutRef.current) {
+        clearTimeout(rotationTimeoutRef.current)
+        rotationTimeoutRef.current = null
+      }
+    }
   }, [position])
 
   return (
