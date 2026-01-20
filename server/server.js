@@ -23,16 +23,16 @@ app.use(express.json())
 const polygon = [
   [34.055, -118.275],
   [34.055, -118.225],
-  [34.020, -118.225],
-  [34.020, -118.275]
+  [34.02, -118.225],
+  [34.02, -118.275],
 ]
-const DEFAULT_COUNT = Number(process.env.ROBOT_COUNT) || 200
+const DEFAULT_COUNT = Number(process.env.ROBOT_COUNT) || 20
 const DEFAULT_MOVE_METERS = Number(process.env.MOVE_METERS) || 100
-const DEFAULT_MOVE_INTERVAL_MS = Number(process.env.MOVE_INTERVAL_MS)
-|| 1500
+const DEFAULT_MOVE_INTERVAL_MS = Number(process.env.MOVE_INTERVAL_MS) || 1500
 // utils
 function pointInPolygon(point, vs) {
-  const x = point[1], y = point[0]
+  const x = point[1],
+    y = point[0]
   let inside = false
   for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
     const xi = vs[i][1],
@@ -40,8 +40,7 @@ function pointInPolygon(point, vs) {
     const xj = vs[j][1],
       yj = vs[j][0]
     const intersect =
-      (yi > y) !== (yj > y) &&
-      x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi
+      yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi
     if (intersect) inside = !inside
   }
   return inside
@@ -49,8 +48,10 @@ function pointInPolygon(point, vs) {
 function randomPointInPolygon(polygonLatLng) {
   const lats = polygonLatLng.map(p => p[0])
   const lngs = polygonLatLng.map(p => p[1])
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats)
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs)
+  const minLat = Math.min(...lats),
+    maxLat = Math.max(...lats)
+  const minLng = Math.min(...lngs),
+    maxLng = Math.max(...lngs)
   for (let i = 0; i < 1000; i++) {
     const lat = minLat + Math.random() * (maxLat - minLat)
     const lng = minLng + Math.random() * (maxLng - minLng)
@@ -114,8 +115,7 @@ app.post('/reset', (req, res) => {
 })
 app.post('/start-auto', (req, res) => {
   const meters = Number(req.body.meters) || DEFAULT_MOVE_METERS
-  const intervalMs =
-    Number(req.body.intervalMs) || DEFAULT_MOVE_INTERVAL_MS
+  const intervalMs = Number(req.body.intervalMs) || DEFAULT_MOVE_INTERVAL_MS
   startAuto(meters, intervalMs)
   res.json({ status: 'started', meters, intervalMs })
 })
@@ -130,4 +130,3 @@ const port = Number(process.env.PORT) || 4000
 app.listen(port, () => {
   console.log(`Robot service listening on http://localhost:${port}`)
 })
-
