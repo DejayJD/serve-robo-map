@@ -48,12 +48,10 @@ export const Robot = ({ position }: { position: LatLngTuple }) => {
         return
       }
 
-      // Determine the rotation to the new position
-      const rawRotationTo = Math.floor(
+      // Determine the rotation to the new position. Value ranges between -180->0->180 degrees.
+      const rotationTo = Math.floor(
         Math.atan2(to[1] - from[1], to[0] - from[0]) * (180 / Math.PI)
       )
-      // Normalize the rotation to be between 0 and 360 degrees rather than -180 to 180 degrees
-      const rotationTo = rawRotationTo < 0 ? rawRotationTo + 360 : rawRotationTo
 
       // This is the robot-marker-container right below the Marker
       const robotContainerRef = robotRef.current.getElement()?.firstElementChild
