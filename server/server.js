@@ -109,7 +109,7 @@ app.post('/move', (req, res) => {
   res.json({ robots })
 })
 app.post('/reset', (req, res) => {
-  const count = Number(req.body.count) || DEFAULT_COUNT
+  const count = Number(req.body.count) ?? DEFAULT_COUNT
   initRobots(count)
   res.json({ robots })
 })

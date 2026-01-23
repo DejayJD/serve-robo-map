@@ -1,0 +1,28 @@
+.number-input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: solid 1px rgb(211, 211, 211);
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgb(66, 65, 65);
+  padding: 10px;
+  padding-left: 70px;
+  &:focus {
+    outline: 1px solid #61e5c0;
+    border-color: #61e5c0;
+  }
+}
+
+.number-input-label {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(66, 65, 65);
+  font-size: 16px;
+  font-weight: bold;
+}

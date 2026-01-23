@@ -1,6 +1,6 @@
 import { Marker } from 'react-leaflet'
 import { LatLngTuple, Marker as LeafletMarker } from 'leaflet'
-import IconServeRobot from './assets/icon-serve-robot.png'
+import IconServeRobot from '../../assets/icon-serve-robot.png'
 import { DivIcon } from 'leaflet'
 import './Robot.css'
 import { useEffect, useRef } from 'react'
@@ -19,15 +19,21 @@ const RobotIcon = new DivIcon({
   popupAnchor: [0, -40],
 })
 
-const MOVE_ANIMATION_DURATION = 1000 // ms
-const ROTATION_ANIMATION_DURATION = 500 // ms
-
 // easing function from https://easings.net
 function easeOutSine(x: number): number {
   return Math.sin((x * Math.PI) / 2)
 }
 
-export const Robot = ({ position }: { position: LatLngTuple }) => {
+export const Robot = ({
+  position,
+  autoIntervalMs,
+}: {
+  position: LatLngTuple
+  autoIntervalMs: number
+}) => {
+  const MOVE_ANIMATION_DURATION = Math.ceil(autoIntervalMs * 0.75) // 75% of the auto interval
+  const ROTATION_ANIMATION_DURATION = Math.floor(autoIntervalMs * 0.25) // 25% of the auto interval
+
   const robotRef = useRef<LeafletMarker | null>(null)
   const prevPositionRef = useRef<LatLngTuple | null>(position)
   const movementAnimationRef = useRef<number | null>(null)
